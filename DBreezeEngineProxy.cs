@@ -19,6 +19,7 @@ public class DBreezeEngineProxy : IDBreezeEngineProxy, IDBreezeEngineProxyChildF
     private ulong _engineCreated = 0U;
     public ulong Transactions => _transactions;
     private ulong _transactions = 0U;
+    private bool _disposeEngineIfIdle = false;
     private readonly ConcurrentDictionary<int, ProxyState<IScheme>> _nonDisposedSchemes = new();
     private readonly ConcurrentDictionary<int, ProxyState<IDBreezeEngineProxy>> _nonDisposedEngineProxies = new();
 
@@ -126,7 +127,7 @@ public class DBreezeEngineProxy : IDBreezeEngineProxy, IDBreezeEngineProxyChildF
     }
     private void DisposeEngineIfNotUsed()
     {
-        if (_nonDisposedSchemes.IsEmpty && _nonDisposedEngineProxies.IsEmpty)
+        if (_nonDisposedSchemes.IsEmpty && _nonDisposedEngineProxies.IsEmpty && _disposeEngineIfIdle)
         {
             _logger.LogDebug("Everything is Disposed, Closing Engine!");
             _engine?.Dispose();
