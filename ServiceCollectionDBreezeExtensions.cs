@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             SetNewtonsoftJsonSerializer();
             services.Configure(configure);
             services.AddSingleton<IDBreezeEngineProxyChildFactory, DBreezeEngineProxy>();
-            services.AddScoped<IDBreezeEngineProxy>(provider =>
+            services.AddTransient<IDBreezeEngineProxy>(provider =>
                 provider.GetRequiredService<IDBreezeEngineProxyChildFactory>().CreateDisposableChild());
             return services;
         }
